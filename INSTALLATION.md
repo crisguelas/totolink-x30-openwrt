@@ -136,29 +136,32 @@ The router's bootloader expects your computer to be at `192.168.1.254`.
      ```
      *(or `openwrt-mediatek-filogic-totolink_X30-squashfs-sysupgrade.bin`)* and press **Enter**.
 7. **Watch Tftpd64:** You will see the ~11 MB file transferring over Ethernet (takes ~5–10 seconds).
-7. PuTTY will show:
-   - Erasing NAND...
-   - Writing NAND...
-   - Verifying...
-   - **Success!**
-8. The router will automatically reboot (or select option `1. Startup system`).
+8. In PuTTY, U-Boot will write the image:
+   ```text
+   Creating dynamic volume fit of size 11727112
+   11727112 bytes written to volume fit
+   Press ENTER to return to menu
+   ```
+9. Press **Enter** to return to the OpenWrt U-Boot menu.
+10. In the menu, use arrow keys to select:
+    ```text
+    1. Run default boot command.
+    ```
+    and press **Enter**!
 
 ---
 
 ## Step 6: First Boot & Access OpenWrt Web Interface (LuCI)
 
-1. Watch PuTTY: You will see the Linux 6.6 kernel boot messages, followed by the OpenWrt banner:
+1. Watch PuTTY: You will see the Linux kernel and OpenWrt startup logs scroll by.
+2. When the scrolling stops and you see:
    ```text
-    _______                     ________        __
-   |       |.-----.-----.-----.|  |  |  |.----.|  |_
-   |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
-   |_______||   __|_____|__|__||________||__|  |____|
-            |__| W I R E L E S S   F R E E D O M
-   -----------------------------------------------------
-   OpenWrt 25.12.5, r0-xxxxxxxx
-   -----------------------------------------------------
+   Please press Enter to activate this console.
    ```
-2. When the logs stop scrolling and you see `Please press Enter to activate this console`, press **Enter** to get a root shell.
+   **Press Enter!** You will immediately see the OpenWrt ASCII logo and the root shell prompt:
+   ```text
+   root@OpenWrt:~#
+   ```
 3. **Restore Ethernet to Automatic (DHCP):**
    * Press **`Win + R`**, type **`ncpa.cpl`**, and press **Enter**.
    * Right-click **Ethernet** $\rightarrow$ **Properties** $\rightarrow$ **Internet Protocol Version 4 (TCP/IPv4)** $\rightarrow$ **Properties**.
