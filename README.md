@@ -2,6 +2,8 @@
 
 Custom OpenWrt firmware builder and installation tools for the **TOTOLINK X30** (STC Wi-Fi 6 Smart Mesh AX3000) on the MediaTek Filogic (MT7981B) platform.
 
+Current Target Release: **OpenWrt 25.12.5 (Stable)**
+
 ---
 
 ## Hardware Specifications
@@ -17,6 +19,16 @@ Custom OpenWrt firmware builder and installation tools for the **TOTOLINK X30** 
 
 ---
 
+## OpenWrt 25.12.5 Highlights for MediaTek Filogic
+
+- **Linux Kernel 6.6 LTS:** Enhanced stability, power efficiency, and security patches.
+- **Wi-Fi 6 & WPA3:** Native MT7976C / MT7915 wireless driver optimizations with full WPA3-SAE encryption support.
+- **Firewall4 & nftables:** High-throughput hardware offloading for full gigabit routing at minimal CPU usage.
+- **Modern Package System:** Includes support for `apk` package management alongside standard `opkg`.
+- **Responsive LuCI:** Clean, modern web interface with SSL/TLS encryption.
+
+---
+
 ## Repository Structure
 
 ```text
@@ -27,15 +39,15 @@ Custom OpenWrt firmware builder and installation tools for the **TOTOLINK X30** 
 ├── patches/
 │   ├── ad67960-mediatek-add-TOTOLINK-X30-support.patch   # Official upstream board patch
 │   └── 0002-mediatek-filogic-add-totolink-x30-fit-upgrade.patch  # FIT sysupgrade patch
-├── tools/
-│   ├── set-static-ip.ps1       # 1-Click Ethernet configurator (192.168.1.254)
-│   ├── restore-dhcp.ps1        # 1-Click DHCP & Wi-Fi restore
-│   └── verify-firmware.ps1     # SHA256 checksum & file integrity verifier
+└── tools/
+    ├── set-static-ip.ps1       # 1-Click Ethernet configurator (192.168.1.254)
+    ├── restore-dhcp.ps1        # 1-Click DHCP & Wi-Fi restore
+    └── verify-firmware.ps1     # SHA256 checksum & file integrity verifier
 ```
 
 ---
 
-## Flashing Instructions (Quick Summary)
+## Initial Flashing Instructions (Quick Summary)
 
 1. **Hardware Connection:**
    - Connect USB-to-TTL (3.3V) to router UART (`GND` -> `GND`, `RX` -> `TX`, `TX` -> `RX`). Do **NOT** connect VCC.
@@ -55,3 +67,12 @@ Custom OpenWrt firmware builder and installation tools for the **TOTOLINK X30** 
    - In the new OpenWrt U-Boot menu, select `Load production system via TFTP then write to NAND` and flash `openwrt-mediatek-filogic-totolink_X30-squashfs-sysupgrade.bin`.
 8. **First Login:**
    - Run `tools/restore-dhcp.ps1`, open browser to `http://192.168.1.1`, login with `root` (no password) and set a new password.
+
+---
+
+## Future Upgrades (No Disassembly Needed!)
+
+Once OpenWrt is running on your TOTOLINK X30, you **never need to open the case, touch UART, or use TFTP again**:
+
+1. **Automated Cloud Builds:** When OpenWrt releases a new version (e.g., 25.12.6 or future releases), go to the **Actions** tab on GitHub and click **Run workflow**. It will automatically compile the newest release using your recipe.
+2. **Web Sysupgrade:** Download the newly compiled `openwrt-...-sysupgrade.bin` file, open your browser to `http://192.168.1.1`, navigate to **System $\rightarrow$ Backup / Flash Firmware**, upload the image, and click **Flash**!
