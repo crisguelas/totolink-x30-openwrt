@@ -1,0 +1,8 @@
+# Binaries & builds
+tftp/
+build/openwrt-build/
+*.bin
+*.fip
+*.tar.gz
+*.zip
+*.log
