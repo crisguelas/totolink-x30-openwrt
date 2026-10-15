@@ -49,7 +49,7 @@ The router's bootloader expects your computer to be at `192.168.1.254`.
 ## Step 3: Connect PuTTY Serial Console
 
 1. Open **PuTTY**.
-2. Select **Serial** connection type.
+2. Under **Connection type**, select the **Serial** radio button (or on the left-hand category tree, navigate to **Connection ➔ Serial**).
 3. Configure settings:
    - **Serial line:** `COM6` *(or your adapter's COM port)*
    - **Speed:** `115200`
@@ -79,14 +79,29 @@ The router's bootloader expects your computer to be at `192.168.1.254`.
    Upgrade ATF FIP
    ```
    and press **Enter**.
-5. When prompted for filename:
-   - If it displays a default filename or prompts:
+5. When prompted with **Available load methods**:
+   ```text
+   Available load methods:
+       0 - TFTP client (Default)
+       1 - Xmodem
+       2 - Ymodem
+       3 - Kermit
+       4 - S-Record
+       5 - RAM
+
+   Select (enter for default):
+   ```
+   Press **Enter** (or type `0` and press **Enter**) to choose **TFTP client (Default)**.
+6. When prompted for IP and filename:
+   - **Input device IP:** Press **Enter** to accept default (`192.168.1.1`).
+   - **Input server IP:** Press **Enter** to accept default (`192.168.1.254`).
+   - **Input file name:** Type:
      ```text
      openwrt-mediatek-filogic-totolink_X30-bl31-uboot.fip
      ```
-   - Enter `openwrt-mediatek-filogic-totolink_X30-bl31-uboot.fip` and press **Enter**.
-6. **Watch Tftpd64:** A small progress bar will flash across Tftpd64 as the file transfers (~1 second).
-7. In PuTTY, U-Boot will write the FIP to SPI-NAND flash and display:
+     and press **Enter**.
+7. **Watch Tftpd64:** A small progress bar will flash across Tftpd64 as the file transfers (~1 second).
+8. In PuTTY, U-Boot will write the FIP to SPI-NAND flash and display:
    ```text
    Success! / Done
    ```
