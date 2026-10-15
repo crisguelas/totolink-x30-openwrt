@@ -23,17 +23,7 @@ Current Target Release: **OpenWrt 25.12.5 (Stable)**
 | **Switch** | MediaTek MT7531 (5x Gigabit Ethernet: 4x LAN, 1x WAN) |
 | **Wireless** | MediaTek MT7976CN (Wi-Fi 6 802.11ax 2x2 2.4 GHz & 3x3 5 GHz) |
 
----
 
-## OpenWrt 25.12.5 Highlights for MediaTek Filogic
-
-- **Linux Kernel 6.6 LTS:** Enhanced stability, power efficiency, and security patches.
-- **Wi-Fi 6 & WPA3:** Native MT7976C / MT7915 wireless driver optimizations with full WPA3-SAE encryption support.
-- **Firewall4 & nftables:** High-throughput hardware offloading for full gigabit routing at minimal CPU usage.
-- **Modern Package System:** Includes support for `apk` package management alongside standard `opkg`.
-- **Responsive LuCI:** Clean, modern web interface with SSL/TLS encryption.
-
----
 
 ## Built-in Packages & Clean Philosophy
 
@@ -66,14 +56,9 @@ Unlike third-party images or community builders that bake in unnecessary bloat, 
 
 ---
 
-## Initial Flashing Instructions
+## Pre-Flashing Checklist & Requirements
 
-For the complete, detailed step-by-step walkthrough from PuTTY setup to first login, see:  
-👉 **[INSTALLATION.md](file:///d:/web-dev/openwrt/INSTALLATION.md)**
-
-### Pre-Flashing Checklist & Requirements:
-
-Before starting, ensure you have the following ready (detailed guide in [INSTALLATION.md](file:///d:/web-dev/openwrt/INSTALLATION.md)):
+Before starting the installation, ensure you have the following ready:
 
 #### 1. Hardware Needed:
 - **TOTOLINK X30 / STC AX3000** router + 12V power adapter.
