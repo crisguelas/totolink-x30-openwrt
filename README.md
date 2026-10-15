@@ -29,6 +29,19 @@ Current Target Release: **OpenWrt 25.12.5 (Stable)**
 
 ---
 
+## Built-in Packages & Clean Philosophy
+
+Unlike third-party images or community builders that bake in unnecessary bloat, third-party VPN accounts, or background telemetry, this repository follows a **strict, minimal, and bloat-free philosophy**. You get a pure, high-performance OpenWrt foundation with only essential, audited components:
+
+- **LuCI Web Interface (`luci`, `luci-ssl`):** The official OpenWrt web interface with HTTPS encryption enabled out of the box for secure web browser management (`https://192.168.1.1`).
+- **Wi-Fi 6 Hardware Drivers (`kmod-mt7915e`, `kmod-mt7981-firmware`, `mt7981-wo-firmware`):** Official MediaTek radio drivers and wireless offload firmware, unlocking full AX3000 dual-band speeds with WPA3 encryption.
+- **SSL Certificates & Internet Tools (`ca-bundle`, `ca-certificates`, `curl`):** Internet SSL root authority certificates and `curl`. This ensures your router can immediately and securely connect to HTTPS websites and download packages without SSL errors.
+- **Terminal Editor (`nano`):** A friendly, easy-to-use command-line text editor for editing configs over SSH without needing to memorize `vi` commands.
+
+> **Maximum Free Flash Storage:** By avoiding bloatware, your router retains nearly **~95 MB of free NAND flash storage**, giving you plenty of space to install whatever extra packages you want later on directly through the web interface (**System $\rightarrow$ Software**).
+
+---
+
 ## Repository Structure
 
 ```text
