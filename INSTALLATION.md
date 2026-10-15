@@ -97,13 +97,13 @@ The router's bootloader expects your computer to be at `192.168.1.254`.
    - **Input server IP:** Press **Enter** to accept default (`192.168.1.254`).
    - **Input file name:** Type:
      ```text
-     openwrt-mediatek-filogic-totolink_X30-bl31-uboot.fip
+     u-boot.fip
      ```
-     and press **Enter**.
+     *(or `openwrt-mediatek-filogic-totolink_X30-bl31-uboot.fip`)* and press **Enter**.
 7. **Watch Tftpd64:** A small progress bar will flash across Tftpd64 as the file transfers (~1 second).
 8. In PuTTY, U-Boot will write the FIP to SPI-NAND flash and display:
    ```text
-   Success! / Done
+   ATF FIP upgrade completed!
    ```
 
 ---
@@ -111,8 +111,8 @@ The router's bootloader expects your computer to be at `192.168.1.254`.
 ## Step 5: Reboot into OpenWrt U-Boot & Flash Firmware (`.bin`)
 
 1. **Unplug the router power jack, wait 3 seconds, and plug it back in.**
-2. Immediately press the **Up / Down arrow keys** in PuTTY again.
-3. You will now see the new **OpenWrt U-Boot Menu**:
+2. Immediately press the **Up / Down arrow keys** repeatedly in PuTTY until the countdown stops.
+3. You will now see the new **OpenWrt U-Boot Boot Menu**:
    ```text
    *** OpenWrt U-Boot Boot Menu ***
       1. Startup system (Default)
@@ -121,18 +121,21 @@ The router's bootloader expects your computer to be at `192.168.1.254`.
       4. Load initramfs image via TFTP and boot
       ...
    ```
-4. Select:
+4. Use arrow keys to select:
    ```text
    Load production system via TFTP then write to NAND
    ```
    and press **Enter**.
-5. When prompted for filename:
-   - Type or confirm:
+5. When prompted with **Available load methods** (if prompted), press **Enter** (for `0 - TFTP client`).
+6. At the prompts:
+   - **Input device IP:** Press **Enter** (`192.168.1.1`).
+   - **Input server IP:** Press **Enter** (`192.168.1.254`).
+   - **Input file name:** Type:
      ```text
-     openwrt-mediatek-filogic-totolink_X30-squashfs-sysupgrade.bin
+     openwrt.bin
      ```
-   - Press **Enter**.
-6. **Watch Tftpd64:** You will see the ~11 MB file transferring over Ethernet (takes ~5–10 seconds).
+     *(or `openwrt-mediatek-filogic-totolink_X30-squashfs-sysupgrade.bin`)* and press **Enter**.
+7. **Watch Tftpd64:** You will see the ~11 MB file transferring over Ethernet (takes ~5–10 seconds).
 7. PuTTY will show:
    - Erasing NAND...
    - Writing NAND...
