@@ -1,0 +1,132 @@
+name: Build OpenWrt for TOTOLINK X30
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "config/**"
+      - "patches/**"
+      - ".github/workflows/build.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Compile TOTOLINK X30 Firmware
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Free Disk Space on Runner
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android /opt/hostedtoolcache/CodeQL || true
+          docker system prune -af || true
+          df -h
+
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential clang flex bison g++ gawk \
+            gcc-multilib g++-multilib gettext git \
+            libncurses-dev libssl-dev libelf-dev \
+            python3 python3-pyelftools python3-setuptools \
+            rsync swig unzip zlib1g-dev file wget curl time jq
+
+      - name: Resolve Latest Stable OpenWrt Release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          OPENWRT_REF="$(gh api repos/openwrt/openwrt/releases/latest --jq '.tag_name')"
+          if [ -z "$OPENWRT_REF" ] || [ "$OPENWRT_REF" = "null" ]; then
+            OPENWRT_REF="v23.05.5"
+          fi
+          OPENWRT_VERSION="${OPENWRT_REF#v}"
+          echo "tag_name=${OPENWRT_REF}" >> "$GITHUB_OUTPUT"
+          echo "version=${OPENWRT_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Target OpenWrt Release: ${OPENWRT_REF} (${OPENWRT_VERSION})"
+
+      - name: Clone OpenWrt Source
+        run: |
+          git clone --branch "${{ steps.release.outputs.tag_name }}" --single-branch https://github.com/openwrt/openwrt.git openwrt
+          cd openwrt
+          git log -1 --oneline
+
+      - name: Apply TOTOLINK X30 Patches
+        run: |
+          cd openwrt
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          echo "Applying board support patch..."
+          git am --3way ../patches/ad67960-mediatek-add-TOTOLINK-X30-support.patch || git apply ../patches/ad67960-mediatek-add-TOTOLINK-X30-support.patch
+
+          if [ -f "../patches/0002-mediatek-filogic-add-totolink-x30-fit-upgrade.patch" ]; then
+            echo "Applying FIT sysupgrade platform patch..."
+            git apply ../patches/0002-mediatek-filogic-add-totolink-x30-fit-upgrade.patch || true
+          fi
+
+      - name: Update and Install Feeds
+        working-directory: openwrt
+        run: |
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
+      - name: Configure Firmware
+        working-directory: openwrt
+        run: |
+          cp ../config/x30.config .config
+          make defconfig
+          echo "Resolved Config for Filogic TOTOLINK X30:"
+          grep -E "CONFIG_TARGET_mediatek|CONFIG_TARGET_mediatek_filogic_DEVICE_totolink_X30|CONFIG_PACKAGE_luci" .config || true
+
+      - name: Download Package Sources
+        working-directory: openwrt
+        run: |
+          make download -j$(nproc)
+
+      - name: Compile Firmware
+        working-directory: openwrt
+        run: |
+          make -j$(nproc) V=s || make -j1 V=s
+
+      - name: Organize Artifacts
+        run: |
+          mkdir -p bin_output
+          TARGET_DIR="openwrt/bin/targets/mediatek/filogic"
+          
+          find "$TARGET_DIR" -type f \( -iname "*totolink*x30*.fip" -o -iname "*totolink*x30*sysupgrade.bin" -o -iname "*totolink*x30*recovery.bin" \) -exec cp -v {} bin_output/ \;
+
+          cd bin_output
+          sha256sum * > SHA256SUMS.txt
+          ls -lh
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: totolink-x30-openwrt-${{ steps.release.outputs.version }}
+          path: bin_output/*
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ steps.release.outputs.version }}"
+          BUILD_TAG="v${VERSION}-build-$(date +%Y%m%d-%H%M)"
+          gh release create "$BUILD_TAG" bin_output/* \
+            --title "TOTOLINK X30 OpenWrt ${VERSION} (${BUILD_TAG})" \
+            --notes "Custom clean build of OpenWrt ${VERSION} for TOTOLINK X30 (MediaTek MT7981B Filogic).
+            
+            ### Included Artifacts:
+            - **openwrt-...-bl31-uboot.fip** (OpenWrt U-Boot Bootloader for initial UART flashing)
+            - **openwrt-...-squashfs-sysupgrade.bin** (OpenWrt System Image)
+            
+            ### SHA256 Checksums:
+            Check the attached SHA256SUMS.txt for file verification."
