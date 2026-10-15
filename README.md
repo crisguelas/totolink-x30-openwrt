@@ -12,22 +12,6 @@ Current Target Release: **OpenWrt 25.12.5 (Stable)**
 
 ---
 
-## Downloads & GitHub Releases
-
-You can download pre-compiled firmware directly from GitHub without compiling:
-
-👉 **[Go to Releases (Download .fip & .bin)](https://github.com/crisguelas/totolink-x30-openwrt/releases)**
-
-### How to Find Releases Manually on GitHub:
-1. Open the repository: [github.com/crisguelas/totolink-x30-openwrt](https://github.com/crisguelas/totolink-x30-openwrt)
-2. In the **right-hand sidebar** on desktop (or scrolled down on mobile), look for **Releases**.
-3. Click on the latest release tag (e.g. `TOTOLINK X30 OpenWrt 25.12.5`).
-4. Under **Assets**, click to download:
-   - `openwrt-...-bl31-uboot.fip` (Bootloader for initial flash)
-   - `openwrt-...-squashfs-sysupgrade.bin` (Firmware for initial flash & future web updates)
-
----
-
 ## Hardware Specifications
 
 | Component | Specification |
@@ -87,23 +71,23 @@ Unlike third-party images or community builders that bake in unnecessary bloat, 
 For the complete, detailed step-by-step walkthrough from PuTTY setup to first login, see:  
 👉 **[INSTALLATION.md](file:///d:/web-dev/openwrt/INSTALLATION.md)**
 
-### Quick Summary:
+### Pre-Flashing Checklist & Requirements:
 
-1. **Hardware Connection:**
-   - Connect USB-to-TTL (3.3V) to router UART (`GND` -> `GND`, `RX` -> `TX`, `TX` -> `RX`). Do **NOT** connect VCC.
-   - Connect PC to router LAN port via Ethernet cable.
-2. **Serial Console:**
-   - Open PuTTY: Select Connection type `Serial`, enter your Serial line (e.g. `COM6`), and set Speed to `115200`.
-3. **Static IP:**
-   - Set PC Ethernet to static IP `192.168.1.254` (Subnet `255.255.255.0`, Gateway blank via `ncpa.cpl`).
-4. **TFTP Server:**
-   - Run Tftpd64 bound to `192.168.1.254` serving `d:\web-dev\openwrt\tftp\`.
-5. **Flash Step 1 (Bootloader):**
-   - In U-Boot menu, select `Upgrade ATF FIP` and flash `openwrt-mediatek-filogic-totolink_X30-bl31-uboot.fip`. Reboot.
-6. **Flash Step 2 (Firmware):**
-   - In the new OpenWrt U-Boot menu, select `Load production system via TFTP then write to NAND` and flash `openwrt-mediatek-filogic-totolink_X30-squashfs-sysupgrade.bin`.
-7. **First Login:**
-   - Restore Ethernet to DHCP, open browser to `http://192.168.1.1`, login with `root` (no password) and set a new password.
+Before starting, ensure you have the following ready (detailed guide in [INSTALLATION.md](file:///d:/web-dev/openwrt/INSTALLATION.md)):
+
+#### 1. Hardware Needed:
+- **TOTOLINK X30 / STC AX3000** router + 12V power adapter.
+- **USB-to-TTL Adapter** (3.3V logic level, PL2303 / CP2102 / CH340 / FT232).
+- **3x Female-to-Female Jumper Wires** connecting adapter to router UART (`GND` $\rightarrow$ `GND`, `RX` $\rightarrow$ `TX`, `TX` $\rightarrow$ `RX`). **Do NOT connect VCC.**
+- **RJ45 Ethernet Cable** connecting your computer to any router **LAN port** (1, 2, 3, or 4).
+
+#### 2. Software Needed:
+- **PuTTY** (or serial terminal emulator, configured for `115200` baud, `8-N-1`).
+- **Tftpd64** (portable TFTP server, located in `tftp/tftpd64.exe`).
+
+#### 3. Files Needed (in `tftp/` directory or from [Releases](https://github.com/crisguelas/totolink-x30-openwrt/releases)):
+- `openwrt-mediatek-filogic-totolink_X30-bl31-uboot.fip` (OpenWrt U-Boot Bootloader)
+- `openwrt-mediatek-filogic-totolink_X30-squashfs-sysupgrade.bin` (OpenWrt System Firmware)
 
 ---
 
