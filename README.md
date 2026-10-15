@@ -4,6 +4,28 @@ Custom OpenWrt firmware builder and installation tools for the **TOTOLINK X30** 
 
 Current Target Release: **OpenWrt 25.12.5 (Stable)**
 
+[![Latest Release](https://img.shields.io/github/v/release/crisguelas/totolink-x30-openwrt?include_prereleases&label=Latest%20Release&logo=github)](https://github.com/crisguelas/totolink-x30-openwrt/releases)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/crisguelas/totolink-x30-openwrt/build.yml?branch=main&label=Build%20Status)](https://github.com/crisguelas/totolink-x30-openwrt/actions)
+
+> 📥 **Download Ready-to-Flash Firmware:**  
+> Pre-compiled `.fip` bootloader and `sysupgrade.bin` images are published on the **[GitHub Releases Page](https://github.com/crisguelas/totolink-x30-openwrt/releases)**.
+
+---
+
+## Downloads & GitHub Releases
+
+You can download pre-compiled firmware directly from GitHub without compiling:
+
+👉 **[Go to Releases (Download .fip & .bin)](https://github.com/crisguelas/totolink-x30-openwrt/releases)**
+
+### How to Find Releases Manually on GitHub:
+1. Open the repository: [github.com/crisguelas/totolink-x30-openwrt](https://github.com/crisguelas/totolink-x30-openwrt)
+2. In the **right-hand sidebar** on desktop (or scrolled down on mobile), look for **Releases**.
+3. Click on the latest release tag (e.g. `TOTOLINK X30 OpenWrt 25.12.5`).
+4. Under **Assets**, click to download:
+   - `openwrt-...-bl31-uboot.fip` (Bootloader for initial flash)
+   - `openwrt-...-squashfs-sysupgrade.bin` (Firmware for initial flash & future web updates)
+
 ---
 
 ## Hardware Specifications
