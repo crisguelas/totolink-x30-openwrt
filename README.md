@@ -69,12 +69,14 @@ Unlike third-party images or community builders that bake in unnecessary bloat, 
 ```text
 ├── .github/workflows/
 │   └── build.yml               # Automated GitHub Actions workflow to build firmware
+├── INSTALLATION.md             # Complete step-by-step PuTTY to OpenWrt installation guide
 ├── config/
 │   └── x30.config              # Custom OpenWrt seed configuration (Clean & Minimal)
 ├── patches/
 │   ├── ad67960-mediatek-add-TOTOLINK-X30-support.patch   # Official upstream board patch
 │   └── 0002-mediatek-filogic-add-totolink-x30-fit-upgrade.patch  # FIT sysupgrade patch
 └── tools/
+    ├── download-firmware.ps1   # 1-Click firmware downloader from GitHub Releases
     ├── set-static-ip.ps1       # 1-Click Ethernet configurator (192.168.1.254)
     ├── restore-dhcp.ps1        # 1-Click DHCP & Wi-Fi restore
     └── verify-firmware.ps1     # SHA256 checksum & file integrity verifier
@@ -82,7 +84,12 @@ Unlike third-party images or community builders that bake in unnecessary bloat, 
 
 ---
 
-## Initial Flashing Instructions (Quick Summary)
+## Initial Flashing Instructions
+
+For the complete, detailed step-by-step walkthrough from PuTTY setup to first login, see:  
+👉 **[INSTALLATION.md](file:///d:/web-dev/openwrt/INSTALLATION.md)**
+
+### Quick Summary:
 
 1. **Hardware Connection:**
    - Connect USB-to-TTL (3.3V) to router UART (`GND` -> `GND`, `RX` -> `TX`, `TX` -> `RX`). Do **NOT** connect VCC.
