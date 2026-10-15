@@ -21,12 +21,14 @@ Before starting, confirm you have:
 
 The router's bootloader expects your computer to be at `192.168.1.254`.
 
-1. Open **PowerShell as Administrator**.
-2. Run:
-   ```powershell
-   powershell -ExecutionPolicy Bypass -File d:\web-dev\openwrt\tools\set-static-ip.ps1
-   ```
-3. Your Ethernet adapter is now set to `192.168.1.254 / 255.255.255.0`. *(Your Wi-Fi remains active).*
+1. Press **`Win + R`**, type **`ncpa.cpl`**, and press **Enter** (opens Network Connections).
+2. Right-click your **Ethernet** adapter and select **Properties**.
+3. Select **Internet Protocol Version 4 (TCP/IPv4)** and click **Properties**.
+4. Select **Use the following IP address**:
+   * **IP address:** `192.168.1.254`
+   * **Subnet mask:** `255.255.255.0`
+   * **Default gateway:** *(Leave blank)*
+5. Click **OK**, then click **Close**. *(Your Wi-Fi remains active for internet/chat).*
 
 ---
 
@@ -139,11 +141,11 @@ The router's bootloader expects your computer to be at `192.168.1.254`.
    -----------------------------------------------------
    ```
 2. When the logs stop scrolling and you see `Please press Enter to activate this console`, press **Enter** to get a root shell.
-3. **Restore your laptop's network:**
-   Open PowerShell as Administrator and run:
-   ```powershell
-   powershell -ExecutionPolicy Bypass -File d:\web-dev\openwrt\tools\restore-dhcp.ps1
-   ```
+3. **Restore Ethernet to Automatic (DHCP):**
+   * Press **`Win + R`**, type **`ncpa.cpl`**, and press **Enter**.
+   * Right-click **Ethernet** $\rightarrow$ **Properties** $\rightarrow$ **Internet Protocol Version 4 (TCP/IPv4)** $\rightarrow$ **Properties**.
+   * Select **Obtain an IP address automatically** and **Obtain DNS server address automatically**.
+   * Click **OK**, then click **Close**.
 4. Your laptop will receive an automatic DHCP IP address (e.g., `192.168.1.150`).
 5. Open your web browser and navigate to:
    👉 **`http://192.168.1.1`** (or `https://192.168.1.1`)

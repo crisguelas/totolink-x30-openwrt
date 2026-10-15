@@ -77,8 +77,6 @@ Unlike third-party images or community builders that bake in unnecessary bloat, 
 │   └── 0002-mediatek-filogic-add-totolink-x30-fit-upgrade.patch  # FIT sysupgrade patch
 └── tools/
     ├── download-firmware.ps1   # 1-Click firmware downloader from GitHub Releases
-    ├── set-static-ip.ps1       # 1-Click Ethernet configurator (192.168.1.254)
-    ├── restore-dhcp.ps1        # 1-Click DHCP & Wi-Fi restore
     └── verify-firmware.ps1     # SHA256 checksum & file integrity verifier
 ```
 
@@ -94,21 +92,18 @@ For the complete, detailed step-by-step walkthrough from PuTTY setup to first lo
 1. **Hardware Connection:**
    - Connect USB-to-TTL (3.3V) to router UART (`GND` -> `GND`, `RX` -> `TX`, `TX` -> `RX`). Do **NOT** connect VCC.
    - Connect PC to router LAN port via Ethernet cable.
-2. **Identify COM Port:**
-   - Press `Win + R`, type `devmgmt.msc`, and press Enter to open **Device Manager**.
-   - Expand **Ports (COM & LPT)** to find the assigned port for your USB-to-TTL adapter (e.g. `COM3`, `COM4`, `COM6`).
-3. **Serial Console:**
+2. **Serial Console:**
    - Open PuTTY: Select Connection type `Serial`, enter your Serial line (e.g. `COM6`), and set Speed to `115200`.
-4. **Network Configuration:**
-   - Run `tools/set-static-ip.ps1` to set PC Ethernet to `192.168.1.254`.
-5. **TFTP Server:**
-   - Run Tftpd64 bound to `192.168.1.254` serving the built `.fip` and `sysupgrade.bin` files.
-6. **Flash Step 1 (Bootloader):**
+3. **Static IP:**
+   - Set PC Ethernet to static IP `192.168.1.254` (Subnet `255.255.255.0`, Gateway blank via `ncpa.cpl`).
+4. **TFTP Server:**
+   - Run Tftpd64 bound to `192.168.1.254` serving `d:\web-dev\openwrt\tftp\`.
+5. **Flash Step 1 (Bootloader):**
    - In U-Boot menu, select `Upgrade ATF FIP` and flash `openwrt-mediatek-filogic-totolink_X30-bl31-uboot.fip`. Reboot.
-7. **Flash Step 2 (Firmware):**
+6. **Flash Step 2 (Firmware):**
    - In the new OpenWrt U-Boot menu, select `Load production system via TFTP then write to NAND` and flash `openwrt-mediatek-filogic-totolink_X30-squashfs-sysupgrade.bin`.
-8. **First Login:**
-   - Run `tools/restore-dhcp.ps1`, open browser to `http://192.168.1.1`, login with `root` (no password) and set a new password.
+7. **First Login:**
+   - Restore Ethernet to DHCP, open browser to `http://192.168.1.1`, login with `root` (no password) and set a new password.
 
 ---
 
